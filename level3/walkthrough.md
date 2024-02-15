@@ -99,3 +99,6 @@ level4
 cat /home/user/level4/.pass
 ```
 
+Sources:<br>
+[OWASP - Format String Attack](https://owasp.org/www-community/attacks/Format_string_attack) <br>
+[Hacking - The Art of exploitation](https://www.amazon.fr/Hacking-Art-Exploitation-Jon-Erickson/dp/1593271441)
