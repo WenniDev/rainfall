@@ -27,9 +27,9 @@ The program crash with 0x37634136 in final value, it's out point of entry. Now w
 $ python pattern.py --crash 37634136   
 Buffer crashed at size: 80
 ```
-We have our offset, let's try to do a ret2libc exploit. It concist in adding function call of libc at the end in the EIP register.
-We are going to call the system function with /bin/sh as argument lets find thoses addresses with GDB.
-We also need exit to leave properly and the return address of the main
+We have our offset, let's try to do a ret2libc exploit. It consists in adding a function call of libc at the end of the EIP register.
+We are going to call system() with /bin/sh as argument let’s find those addresses with GDB.
+We also need exit() to leave properly and the return address of the main.
 
 ```sh
 $ gdb -q ./level2 
