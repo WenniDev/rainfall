@@ -63,7 +63,7 @@ We also have to find a string containing "/bin/sh", for this we will be helped b
 
 ```sh
 $ export HACK=/bin/sh
-$ /tmp/getenvaddr HACK ./level2
+$ /tmp/genv HACK ./level2
 HACK will be at 0xbffff91d
 ```
 
